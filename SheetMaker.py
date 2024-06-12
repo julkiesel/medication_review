@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 
 SERVICE_FILE = "creds.json"
-COLUMNS = ("Subject", "Predicate", "Object", "Row_Number", "Triple_Number", "Pharmacists_Label")
+COLUMNS = ("Source_Node", "Relationship", "Target_Node", "Row_Number", "Triple_Number", "Pharmacists_Label")
 SOURCE_SHEET = "Graph des Medication Review"
 OUTPUT_SHEET = "Medication_Review_Triples"
 FIRST_SOURCE_WKS = 3
@@ -17,6 +17,8 @@ class SheetMaker(object):
         self.df = pd.DataFrame()
         self.modified_df = pd.DataFrame(columns=COLUMNS)
         self.pharmacists_label = "not set"
+        self.intermediate_df = pd.DataFrame()
+        self.nodes_df = pd.DataFrame()
 
     def get_df(self, worksheet_number):
         wks = self.sh[worksheet_number]
@@ -58,9 +60,25 @@ class SheetMaker(object):
         worksheet = spreadsheet[number]
         worksheet.clear()
         worksheet.title = self.pharmacists_label
+        self.add_nodes_to_df()
         # Write the DataFrame to the Google Sheet
         worksheet.set_dataframe(self.modified_df, (1, 1))
         print("successfully wrote to google sheet")
+
+    def add_nodes_to_df(self):
+        self.intermediate_df = self.modified_df.loc[:,"Source_Node"]
+        self.nodes_df = pd.concat([self.nodes_df, self.intermediate_df], ignore_index=True)
+        self.intermediate_df = self.modified_df.loc[:,"Target_Node"]
+        self.nodes_df = pd.concat([self.nodes_df, self.intermediate_df], ignore_index=True)
+
+
+    def write_nodes_sheet(self):
+        spreadsheet = self.gc.open(OUTPUT_SHEET)
+        worksheet = spreadsheet.worksheet_by_title("Nodes")
+        self.nodes_df = self.nodes_df.drop_duplicates(keep="first")
+        worksheet.set_dataframe(self.nodes_df, (1, 1))
+        print("successfully wrote Nodes to google sheet")
+
 
 
 def main():
@@ -72,6 +90,7 @@ def main():
         maker.write_xlsx(count)
         print(f"Processed {count+1}.Sheet")
         count += 1
+    maker.write_nodes_sheet()
     return 0
 
 
