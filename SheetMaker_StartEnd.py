@@ -28,6 +28,7 @@ class SheetMaker(object):
         self.pharmacists_label = "not set"
 
     def get_df(self, worksheet_number):
+        self.df_out = pd.DataFrame(columns=COLUMNS)
         wks = self.input_sheet[worksheet_number]
         self.pharmacists_label = wks.title
         self.df_in = wks.get_as_df()
@@ -84,7 +85,10 @@ class SheetMaker(object):
                     break
 
     def write_xlsx(self):
-        worksheet = self.output_sheet.worksheet_by_title(self.pharmacists_label)
+        try:
+            worksheet = self.output_sheet.worksheet_by_title(self.pharmacists_label)
+        except pygsheets.exceptions.WorksheetNotFound:
+            worksheet = self.output_sheet.add_worksheet(self.pharmacists_label)
         worksheet.clear()
         self.add_nodes_to_df()
         # Write the DataFrame to the Google Sheet
@@ -98,10 +102,12 @@ class SheetMaker(object):
 
     def write_nodes_sheet(self):
         worksheet = self.output_sheet.worksheet_by_title("Nodes")
+        worksheet.clear()
         self.df_nodes = self.df_nodes.drop_duplicates(keep="first")
         worksheet.set_dataframe(self.df_nodes, (1, 1))
         print("successfully wrote Nodes to google sheet")
         worksheet = self.output_sheet.worksheet_by_title("Total")
+        worksheet.clear()
         worksheet.set_dataframe(self.df_total, (1, 1))
         print("successfully wrote Total google sheet")
 
