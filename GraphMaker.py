@@ -97,6 +97,7 @@ class SheetMaker(object):
 
     def process_df(self, epa_style):
         self.df_in = self.df_in.replace({" ": "", ",": "", ":": ""}, regex=True)
+        self.df_out = pd.DataFrame(columns=COLUMNS)
         row_number = 0
         for index, row in self.df_in.iterrows():
             row_number += 1
