@@ -46,14 +46,14 @@ class SheetMaker(object):
         else:
             return True
     def is_an_outcome(self, edge):
-        if edge in ["needs", "needsRequestOf", "needsClarificationOf", "hasOutcome"]:
+        if edge in ["needs", "needsRequestOf", "needsClarificationOf", "hasOutcome", "giveProposalOf"]:
             return True
         else:
             return False
     def is_part_of_epa(self, target):
         try:
             target_node_filter = self.df_nodes["Name"] == target
-            target_node_data = self.df_nodes.loc[target_node_filter, "epa_label"]
+            target_node_data = self.df_nodes.loc[target_node_filter, "node_of_interest"]
             target_value = target_node_data.values[0]
         except Exception as e:
             print(f"Error with target: {target} and message: {e}")
@@ -63,18 +63,17 @@ class SheetMaker(object):
         else:
             return True
 
-    def modify_target(self, triple):
-        target = triple.target
+    def modify_triple(self, triple):
         if self.is_an_outcome(triple.edge):
-            return target
+            return triple
         else:
-            target_list = target.split(";")
+            target_list = triple.target.split(";")
             new_target_list = []
             for target in target_list:
                 if self.is_part_of_epa(target):
                     new_target_list.append(target)
-            target = ";".join(new_target_list)
-            return target
+            triple.target = ";".join(new_target_list)
+            return triple
 
     def add_triple_to_df(self, triple):
         source_list = triple.source.split(";")
@@ -135,18 +134,19 @@ class SheetMaker(object):
         source_pos = -1
         triple = self.Triple(row_number, triple_number, None, None, row.iloc[0])
         self.add_start(triple)
-        for col in range(1, len(row), 2):  # Iterate over pairs of columns (Edge, Target)
+        for col in range(1, len(row)+1, 2):  # Iterate over pairs of columns (Edge, Target)
             triple_number += 1
+            edge = row.iloc[col]
+            target = row.iloc[col + 1]
             if source_pos == -1:
                 source = row.iloc[col - 1]
-                edge = row.iloc[col]
             else:
                 source = row.iloc[source_pos]
-                edge = "connectedTo"
-            target = row.iloc[col + 1]
+                if not self.is_an_outcome(edge):
+                    edge = "connectedTo"
             triple = self.Triple(row_number, triple_number, source, edge, target)
             if self.is_not_empty(edge) and self.is_not_empty(target):
-                triple.target = self.modify_target(triple)
+                triple = self.modify_triple(triple)
                 row.iloc[col + 1] = triple.target
                 if self.is_not_empty(triple.target):
                     self.add_triple_to_df(triple)
@@ -189,7 +189,7 @@ class SheetMaker(object):
 
 def main():
     count = 0
-    process_in_epa_style = True
+    process_in_epa_style = False
     maker = SheetMaker()
     for title in PHARMACISTS:
         maker.get_df(title)
