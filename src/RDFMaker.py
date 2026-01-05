@@ -7,7 +7,7 @@ class RDFMaker(object):
     def __init__(self, google_sheet, worksheet_number):
         self.worksheet_number = worksheet_number
         # authorization
-        self.gc = pygsheets.authorize(service_file="creds.json")
+        self.gc = pygsheets.authorize(service_file="../creds.json")
         # open the Google spreadsheet
         self.sh = self.gc.open(google_sheet)
         # select the first sheet

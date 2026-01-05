@@ -33,7 +33,7 @@ import sys
 
 
 # Constants
-SERVICE_FILE = "creds.json"
+SERVICE_FILE = "../creds.json"
 COLUMNS = ("Source_Node", "Relationship", "Target_Node", "Pharmacist_1", "Pharmacist_2", "Pharmacist_3", "Pharmacist_4", "Pharmacist_5", "Count")
 SOURCE_SHEET = "Medication_Review_Triples"
 SOURCE_WORKSHEET = "Total"

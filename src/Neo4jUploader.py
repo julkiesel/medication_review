@@ -3,7 +3,7 @@ import sys
 import pandas as pd
 from os import path
 
-SERVICE_FILE = "creds.json"
+SERVICE_FILE = "../creds.json"
 SOURCE_SHEET = "Medication_Review_Triples"
 DIR_OUT = path.abspath("CSV")
 

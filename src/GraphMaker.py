@@ -4,7 +4,7 @@ import sys
 from dataclasses import dataclass
 from typing import Optional
 
-SERVICE_FILE = "creds.json"
+SERVICE_FILE = "../creds.json"
 COLUMNS = ("Source_Node", "Relationship", "Target_Node", "Subprocess", "Step", "Pharmacists_Label")
 SOURCE_SHEET = "Adjazenzlisten_Medication_Review"
 OUTPUT_SHEET = "Medication_Review_Triples"
