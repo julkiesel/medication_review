@@ -1,3 +1,17 @@
+# Interpolar - Medication Review Analysis
+# Python Dependencies
+
+# Datenverarbeitung und -analyse
 pandas
+
+# Google Sheets Integration
 pygsheets
+
+# RDF/Semantic Web Support
 rdflib
+
+# Graph Visualisierung
+yfiles-jupyter-graphs-for-neo4j
+
+# Hinweis: Für das Evaluationscript.ipynb werden zusätzlich benötigt:
+# - neo4j (Neo4j Python Driver)
