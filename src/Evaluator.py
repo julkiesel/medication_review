@@ -25,7 +25,6 @@ class Triple:
     target: Optional[str] - Ziel-Node
     pharmacist_1: [int] - Liste an Row_Numbers für Pharmazeut 1
 
-Autor: Interpolar Project
 """
 import dataclasses
 import pygsheets

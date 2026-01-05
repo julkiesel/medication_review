@@ -12,7 +12,6 @@ Hauptfunktionen:
 Das Modul verwendet die rdflib Bibliothek zur Erstellung von RDF-Graphen und
 speichert diese als XML-Dateien für weitere Verarbeitung.
 
-Autor: Interpolar Project
 """
 
 import pygsheets

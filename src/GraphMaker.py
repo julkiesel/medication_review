@@ -14,7 +14,6 @@ Verarbeitungsmodi:
 - Normal: Sequentielle Verarbeitung der Adjazenzliste
 - EPA-Stil: Spezielle Verarbeitung mit Fokus auf Outcome-Relationships und EPA-relevante Nodes
 
-Autor: Interpolar Project
 """
 
 import pygsheets

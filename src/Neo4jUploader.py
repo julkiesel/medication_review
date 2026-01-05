@@ -9,7 +9,6 @@ Hauptfunktionen:
 - Extraktion von Daten aus mehreren Arbeitsblättern
 - Export als CSV-Dateien für Neo4j-Import
 
-Autor: Interpolar Project
 """
 
 import pygsheets

@@ -14,7 +14,6 @@ Besonderheit:
 Jeder Prozess beginnt mit "start" -> "is" -> [erster Node] und endet mit
 [letzter Node] -> "is" -> "end", um klare Anfangs- und Endpunkte zu definieren.
 
-Autor: Interpolar Project
 """
 
 import pygsheets
